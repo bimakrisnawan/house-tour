@@ -1,9 +1,10 @@
 import { PerformanceMonitor } from '@react-three/drei';
 import { Bloom, EffectComposer, ToneMapping } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '../../state/store';
 import { DPR_MAX } from './quality';
+import { skyLinear } from '../scene/Scene';
 
 /**
  * Runtime correction of the first guess: the frame rate steps render scale down (then bloom off) when it stays
@@ -14,6 +15,8 @@ export function Adaptive() {
   const set = useStore((s) => s.set);
   const [fx, setFx] = useState(true);
   const max = Math.min(DPR_MAX[tier], window.devicePixelRatio || 1);
+  const composer = tier >= 2 && fx;
+  useEffect(() => { skyLinear.value = composer; }, [composer]);
   const min = Math.min(max, 0.6);
 
   return (
@@ -33,9 +36,10 @@ export function Adaptive() {
         }}
         onFallback={() => { set({ dpr: min }); setFx(false); }}
       />
-      {tier >= 2 && fx && (
+      {composer && (
         <EffectComposer multisampling={4}>
-          <Bloom mipmapBlur luminanceThreshold={0.95} intensity={0.55} />
+          {/* threshold above 1: only HDR lamps glow; the sky panorama tops out at 1 and must not haze the view */}
+          <Bloom mipmapBlur luminanceThreshold={1.2} luminanceSmoothing={0.2} intensity={0.55} />
           <ToneMapping mode={ToneMappingMode.AGX} />
         </EffectComposer>
       )}

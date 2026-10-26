@@ -121,7 +121,7 @@
   .kop { left: 8px; right: 8px; top: auto; bottom: 8px; width: auto; max-height: 45vh; z-index: 2 !important; }
   .rail-wrap { right: 8px; top: auto; bottom: 150px; transform: none; flex-direction: column-reverse; align-items: end; }
   .rail { grid-template-columns: repeat(7, auto); }
-  .btn { min-width: 46px; min-height: 48px; padding: 6px 2px 4px; font-size: 10px; }
+  .btn { min-width: 50px; min-height: 52px; padding: 6px 0 4px; font-size: 12px; letter-spacing: -0.01em; }
   .btn .icon { width: 20px; height: 20px; }
   .popover { width: min(300px, calc(100vw - 16px)); }
   .toolbar { bottom: 218px; max-width: calc(100vw - 16px); flex-wrap: wrap; justify-content: center; }
@@ -140,3 +140,4 @@
 /* before mode: the plan is the renovated one, so it marks no room and no position */
 .plan-old .zone-on { outline: none; background: transparent; }
 .plan-old .here { display: none; }
+.plan-old .zone { cursor: default; }

@@ -41,6 +41,16 @@ synthesised ambience (wind, birds by day, crickets at night), graphics menu (aut
 Not built (honest): drawers and kitchen cabinets do not open (their fronts are not separate geometry in the
 .blend); lamps in the old house; mirrors reflect the panorama, not the live scene.
 
+## Visual proof and critique
+- Gate 3 image picked: V2 + V3 fact sheet (2026-10-26).
+- Independent critique (fresh reviewer each round, builder's model, risk class 1): round 1 FAIL 3.50 (hard fail:
+  clipped phone plan labels), round 2 FAIL 3.83, round 3 FAIL 3.83, **round 4 PASS 4.00** (no hard fail).
+  Round 4 remaining notes, all acted on afterwards: after-mode sky washed out (cause: the composer re-tone-mapped
+  the already-AgX sky; fixed with linear sky output), "Halaman" title on the lot fact sheet (now "Rumah"),
+  stale "Memuat rumah… 0%" under the fading poster (fixed), phone rail labels 10 px (now 12 px), plan invited
+  jumps in before mode (zones disabled there). Not re-reviewed after these fixes; verify.mjs passes.
+- Known limits stated in the UI: the old house has only flat colours and no floor plan in the source files.
+
 ## Placeholders
 None in the shipped UI. Room facts are planned values from `blender/rumah/catatan_loop.md` (labelled "ukuran rencana").
 

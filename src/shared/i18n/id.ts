@@ -23,6 +23,7 @@ export const t = {
   factsClose: 'Tutup detail',
   factsNote: 'Ukuran rencana, bukan ukuran terbangun.',
   houseFacts: 'Rumah',
+  lotRoof: 'Lahan & atap',
   modeWalk: 'Jalan',
   modeLand: 'Mendarat',
   modeFly: 'Terbang',

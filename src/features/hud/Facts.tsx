@@ -15,8 +15,8 @@ export function Facts() {
     <aside className="panel kop" aria-label={t.facts}>
       <div className="kop-head">
         <div>
-          <span className="label">{r ? 'Ruang' : t.houseFacts}</span>
-          <b className="kop-title">{r?.name ?? t.outside}</b>
+          <span className="label">{r ? 'Ruang' : t.lotRoof}</span>
+          <b className="kop-title">{r?.name ?? t.houseFacts}</b>
           {r && <span className="mono">{roomSize(r.w, r.d)}</span>}
         </div>
         <button type="button" className="icon-btn" onClick={() => set({ factsOpen: false })} aria-label={t.factsClose}>

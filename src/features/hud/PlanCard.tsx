@@ -87,7 +87,7 @@ export function PlanCard() {
           const w = r.d / PLAN.mPerPx; const h = r.w / PLAN.mPerPx; // image x follows depth, image y follows width
           const [l, tp] = pct(px - w / 2, py - h / 2);
           return (
-            <button key={r.id} type="button" className={`zone ${r.id === room ? 'zone-on' : ''}`} onClick={() => go(r.id)}
+            <button key={r.id} type="button" className={`zone ${r.id === room ? 'zone-on' : ''}`} onClick={() => go(r.id)} disabled={old}
               style={{ left: `${l}%`, top: `${tp}%`, width: `${(w / CW) * 100}%`, height: `${(h / CH) * 100}%` }}
               aria-label={`Pindah ke ${r.name}`} title={r.name}>
               <span className="zone-name">{narrow ? r.short : r.name}</span>
@@ -96,7 +96,7 @@ export function PlanCard() {
         })}
         <span className="here" ref={here} aria-hidden="true"><s /><i /></span>
       </div>
-      <p className="label plan-hint desk-only">{t.planHint}</p>
+      {!old && <p className="label plan-hint desk-only">{t.planHint}</p>}
       {variant === 'eksisting' && <p className="label plan-hint">{t.planOld}</p>}
       <p className="label plan-note">{variant === 'eksisting' ? t.before : t.disclaimerLong}</p>
     </section>

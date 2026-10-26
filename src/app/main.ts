@@ -27,7 +27,10 @@ enter.addEventListener('click', async () => {
   status.textContent = t.loading;
   try {
     const { mountTour } = await import('./tour');
-    await mountTour(document.getElementById('app')!, (msg) => (status.textContent = msg));
+    let loading = true; // later loads (old house, panoramas) must not write onto the fading poster
+    await mountTour(document.getElementById('app')!, (msg) => { if (loading) status.textContent = msg; });
+    loading = false;
+    status.textContent = '';
     const poster = document.getElementById('poster')!;
     const fade = new URLSearchParams(location.search).get('fade'); // ?fade=ms slows the dissolve for review captures
     if (fade) poster.style.transitionDuration = `${Math.min(10000, +fade)}ms`;

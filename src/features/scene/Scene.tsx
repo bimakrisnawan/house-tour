@@ -169,17 +169,21 @@ function LightRig() {
 }
 
 // The poster's own sky (Blender world, render/web/render_sky.py) by day, fading to a dusk/night gradient.
-// No tone mapping in this shader: the panorama is already AgX-rendered, so it shows exactly like the poster.
+// The panorama is already AgX-rendered: drawn straight to the screen it shows exactly like the poster. With the
+// post-processing composer (tier tinggi+) the frame goes through a linear buffer and AgX again, so the shader
+// then outputs linear values (skyLinear) instead of display values, or the sky washes out.
+export const skyLinear = { value: false };
 const skyMat = new ShaderMaterial({
   side: BackSide, depthWrite: false,
-  uniforms: { map: { value: null as Texture | null }, day: { value: 1 }, top: { value: new Color() }, horizon: { value: new Color() } },
+  uniforms: { map: { value: null as Texture | null }, day: { value: 1 }, top: { value: new Color() }, horizon: { value: new Color() }, linear: skyLinear },
   vertexShader: 'varying vec3 vDir; void main() { vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position.z = gl_Position.w; }',
-  fragmentShader: `uniform sampler2D map; uniform float day; uniform vec3 top; uniform vec3 horizon; varying vec3 vDir;
+  fragmentShader: `uniform sampler2D map; uniform float day; uniform vec3 top; uniform vec3 horizon; uniform bool linear; varying vec3 vDir;
     void main() {
       vec3 d = normalize(vDir);
       vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5, asin(clamp(d.y, -1.0, 1.0)) * 0.31830989 + 0.5);
       vec3 grad = mix(horizon, top, pow(clamp(d.y, 0.0, 1.0), 0.6));
-      gl_FragColor = vec4(mix(pow(grad, vec3(1.0 / 2.2)), texture2D(map, uv).rgb, day), 1.0);
+      vec3 c = mix(pow(grad, vec3(1.0 / 2.2)), texture2D(map, uv).rgb, day);
+      gl_FragColor = vec4(linear ? pow(c, vec3(2.2)) : c, 1.0);
     }`,
 });
 
