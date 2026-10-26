@@ -10,9 +10,10 @@
              UV0 + LM UVs, albedo atlas bake, 12 light-group bakes
              (OIDN), panoramas, tree impostors, join statics
              ──► web/out/<variant>/ rumah.glb, lm_*.png, manifest.json
+        └─ web/render_sky.py ──► web/out/renovasi/env_langit.png (the poster's sky, world only)
                                             │
                      scripts/build-assets.mjs ──► public/assets/<variant>/{lo,md,hi}.glb, lm/{1k,2k}/*.webp,
-                     (gltf-transform + sharp)      env/{dalam,luar}.webp, denah.webp, scene.json; public/benchmarks
+                     (gltf-transform + sharp)      env/{dalam,luar,langit}.webp, denah.webp, scene.json; public/benchmarks
 
  index.html (poster, plain HTML, 7 KB JS) ── "Masuk" ── import('app/tour') ── detect tier ── R3F canvas + HUD
 ```
@@ -54,6 +55,10 @@ Coordinates: Blender Z-up metres -> glTF Y-up (x, z, -y). Rooms (`src/core/rooms
 - Diffuse light = sum over 12 baked groups (ADR 0002); reflections from two Cycles panoramas (living room,
   front yard) switched by whether the camera is inside the house body.
 - Tone mapping AgX (Blender renders use AgX Medium High Contrast). Bloom only from tier tinggi.
+- Sky: the poster's own sky panorama by day (already AgX-rendered, so its shader skips tone mapping), blending
+  to a dusk/night gradient with the time slider. The live scene starts at the poster camera (Cam_Hero), so the
+  poster cross-fades into the same view before the camera glides to the gate (`player/Player.tsx`).
+- The old house has no lamps in the model: indoors the exposure adapts (x3), like an eye in an unlit house.
 - Meshopt quantisation puts a dequantisation scale on mesh nodes: collision converts the capsule radius into
   each collider's local units (`player/collide.ts`).
 

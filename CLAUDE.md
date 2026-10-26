@@ -19,11 +19,13 @@ tinggi+). Asset pipeline: Blender 5.2 Cycles (HIP) + gltf-transform 4.5 + sharp.
 ```
 dev / test / build:  npm run dev | npm test | npm run build      (build = tsc + vite + 100 MB budget check)
 assets:              node scripts/build-assets.mjs               (blender/rumah/web/out -> public/assets)
-Blender (in D:. Projectlenderumah, Blender closed or not; runs headless):
+Blender (in D:. Projectlender
+umah, Blender closed or not; runs headless):
   fix z-fighting:    blender -b rumah_renovasi_v3.blend -P web/fix_coplanar.py -- rumah_renovasi_v4.blend
   bake + export:     blender -b rumah_renovasi_v4.blend -P web/build_web.py -- renovasi   (~6 min on RX 7600)
                      blender -b rumah_renovasi_v4.blend -P web/build_web.py -- eksisting  (~1.5 min)
                      add --quick for a low-quality pipeline test (~75 s)
+  sky panorama:      blender -b rumah_renovasi_v4.blend -P web/render_sky.py  (poster world only, ~10 s)
 headless checks:     open /?debug -> window.__tour {three, runtime, useStore, teleport}
 deploy:              vercel --prod (owner; Hobby plan)
 ```
