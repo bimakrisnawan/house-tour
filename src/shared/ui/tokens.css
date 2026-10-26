@@ -1,0 +1,35 @@
+/* Design tokens: "Gambar kerja" (Swiss minimal + dimension lines), accent sage.
+   Sage is sampled from the living-room feature wall (render/v3/04_ruang_tamu.png, avg #A3A287 lit).
+   Accent meaning: "where you are / what is active" (position on the plan, active mode, a switched-on toggle). */
+:root {
+  --paper: oklch(0.975 0.006 85);
+  --mist: oklch(0.935 0.008 85);
+  --ink: oklch(0.22 0.01 85);
+  --graphite: oklch(0.45 0.01 85);
+  --hair: oklch(0.22 0.01 85 / 0.14);
+  --accent: oklch(0.6 0.075 135);
+  --accent-ink: oklch(0.47 0.07 138);
+  --on-accent: oklch(0.15 0.01 85);
+  --tint: oklch(0.91 0.03 135);
+  --scrim: oklch(0.22 0.01 85 / 0.55);
+
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius: 6px;
+}
+
+/* Dark set: night scenes and the system setting. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: oklch(0.19 0.008 85);
+    --mist: oklch(0.25 0.008 85);
+    --ink: oklch(0.95 0.006 85);
+    --graphite: oklch(0.74 0.008 85);
+    --hair: oklch(0.95 0.006 85 / 0.16);
+    --accent: oklch(0.66 0.075 135);
+    --accent-ink: oklch(0.76 0.07 135);
+    --on-accent: oklch(0.15 0.01 85);
+    --tint: oklch(0.32 0.04 135);
+    --scrim: oklch(0.12 0.008 85 / 0.6);
+  }
+}

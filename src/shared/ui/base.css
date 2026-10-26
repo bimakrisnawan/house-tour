@@ -1,0 +1,45 @@
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font: 400 15px/1.45 var(--font-sans);
+  color: var(--ink);
+  background: var(--ink);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+.panel {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px oklch(0.22 0.01 85 / 0.12), 0 8px 24px oklch(0.22 0.01 85 / 0.12);
+}
+.chip {
+  margin: 0; font-size: 12px; color: var(--ink); background: var(--paper);
+  padding: 4px 10px; border-radius: 4px; border: 1px solid var(--hair);
+}
+.mono { font-family: var(--font-mono); font-feature-settings: "tnum"; }
+.label { font-size: 12px; color: var(--graphite); }
+.nowrap { white-space: nowrap; }
+kbd {
+  display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px;
+  border: 1px solid var(--ink); border-radius: 4px; font: 500 12px var(--font-mono);
+}
+.btn-primary {
+  min-height: 48px; padding: 0 28px; border: 0; border-radius: 4px;
+  background: var(--ink); color: var(--paper); font-weight: 600; font-size: 16px;
+}
+.btn-primary:disabled { opacity: 0.6; cursor: progress; }
+
+/* pointer type decides which hints show (a touch laptop shows both) */
+@media (hover: none), (pointer: coarse) { .desk-only { display: none !important; } }
+@media (hover: hover) and (pointer: fine) { .touch-only { display: none !important; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
