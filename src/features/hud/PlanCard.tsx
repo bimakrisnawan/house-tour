@@ -31,6 +31,7 @@ export function PlanCard() {
   const set = useStore((s) => s.set);
   const here = useRef<HTMLSpanElement>(null);
   const current = ROOMS.find((r) => r.id === room);
+  const old = variant === 'eksisting'; // room boxes and sizes describe the renovated plan only
   const narrow = useNarrow();
 
   useEffect(() => { // marker follows the player without re-rendering React
@@ -63,11 +64,11 @@ export function PlanCard() {
       <header className="plan-head">
         <div>
           {big && <span className="label plan-kicker">{t.planTitle}</span>}
-          <b className="plan-room">{current?.name ?? t.outside}</b>
-          {current && <span className="mono label nowrap"> {roomSize(current.w, current.d)}</span>}
+          <b className="plan-room">{old ? t.oldHouse : current?.name ?? t.outside}</b>
+          {current && !old && <span className="mono label nowrap"> {roomSize(current.w, current.d)}</span>}
         </div>
         <div className="plan-actions">
-          {current && (
+          {current && !old && (
             <button type="button" className="icon-btn" onClick={() => set({ factsOpen: !useStore.getState().factsOpen })} aria-label={t.facts} title={`${t.facts} (I)`}>
               <Icon name="info" />
             </button>

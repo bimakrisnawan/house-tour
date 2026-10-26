@@ -1,7 +1,7 @@
 import { PointerLockControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { Euler, Line3, Vector3 } from 'three';
+import { Euler, Line3, Quaternion, Vector3, type PerspectiveCamera } from 'three';
 import { insideHouse, pushOutOfHouse, roomAt } from '../../core/rooms';
 import { useStore } from '../../state/store';
 import { footstep } from '../audio/audio';
@@ -19,6 +19,17 @@ const GRAVITY = -9.8;
 const STEP_EVERY = 0.62; // metres per footstep sound
 export const SPAWN = new Vector3(11.9, 0.1, 4.2); // pavement across from the gate (Blender 11.9, -4.2)
 
+// Signature moment: the scene starts exactly where the poster render was taken (Cam_Hero: Blender (15.4, -7, 1.6),
+// rotation (1.5843, 0, 0.245), 28 mm on 36 mm), so the poster dissolves into the live view, then glides to the gate.
+const HERO_POS = new Vector3(15.4, 1.6, 7.0);
+const HERO_ROT = new Quaternion().setFromEuler(new Euler(1.5843 - Math.PI / 2, 0.245, 0, 'YXZ'));
+const HERO_HALF_HFOV = Math.atan(18 / 28);
+const INTRO = 2.6; // seconds
+export const fovBase = { value: 70 }; // set by the canvas from the aspect ratio
+const heroFov = (aspect: number) => // the poster covers the screen (object-fit: cover) like a 16:9 frame
+  (2 * Math.atan(Math.tan(HERO_HALF_HFOV) / Math.max(aspect, 16 / 9)) * 180) / Math.PI;
+const reduceMotion = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /** Teleport request from the plan card, consumed on the next frame. */
 export const teleport = { to: null as null | { x: number; z: number; yaw?: number } };
 export const playerPos = SPAWN.clone();
@@ -32,20 +43,36 @@ const capsule = new Line3();
 const delta = new Vector3();
 const euler = new Euler(0, 0, 0, 'YXZ');
 const before = new Vector3();
+const eye = new Vector3();
+const gateRot = new Quaternion(); // identity: facing -z, the gate
 
 export function Player({ touch }: { touch: boolean }) {
   const camera = useThree((s) => s.camera);
   const onGround = useRef(false);
   const stride = useRef(0);
+  const intro = useRef(reduceMotion ? INTRO : 0);
   const set = useStore((s) => s.set);
 
   useEffect(() => {
     camera.rotation.order = 'YXZ';
     camera.rotation.set(0, 0, 0); // facing the gate (-z)
+    if (!reduceMotion) { camera.position.copy(HERO_POS); camera.quaternion.copy(HERO_ROT); }
   }, [camera]);
 
   useFrame((_, rawDt) => {
     const dt = Math.min(rawDt, 0.05); // a long frame (tab switch) must not tunnel through walls
+    const cam = camera as PerspectiveCamera;
+    if (intro.current < INTRO) {
+      intro.current += dt;
+      const k = Math.min(1, Math.max(0, (intro.current - 0.6) / (INTRO - 0.6))); // hold while the poster fades
+      const e = k * k * (3 - 2 * k);
+      cam.position.lerpVectors(HERO_POS, eye.set(SPAWN.x, SPAWN.y + EYE, SPAWN.z), e);
+      cam.quaternion.slerpQuaternions(HERO_ROT, gateRot, e);
+      cam.fov = heroFov(cam.aspect) + (fovBase.value - heroFov(cam.aspect)) * e;
+      cam.updateProjectionMatrix();
+      camera.getWorldDirection(cameraDir);
+      return;
+    }
     const st = useStore.getState();
     const rt = runtime[st.variant] ?? runtime.renovasi;
     if (!rt) return;

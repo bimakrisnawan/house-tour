@@ -31,7 +31,8 @@
 .map { position: relative; aspect-ratio: 1920 / 900; overflow: hidden; border-radius: 4px; background: var(--mist); }
 .map img { position: absolute; height: auto; user-select: none; }
 .zone { position: absolute; border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 2px; }
-.zone:hover, .zone:focus-visible { background: oklch(0.975 0.006 85 / 0.25); outline: 1.5px solid var(--paper); outline-offset: -1.5px; }
+.zone:hover { background: oklch(0.975 0.006 85 / 0.25); outline: 1.5px solid var(--paper); outline-offset: -1.5px; }
+.zone:focus-visible { background: oklch(0.975 0.006 85 / 0.25); } /* ring from base.css :focus-visible */
 .zone-on { outline: 2px solid var(--accent-ink); outline-offset: -2px; background: oklch(0.6 0.075 135 / 0.18); }
 .zone-name { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--paper); color: var(--ink); font-size: 12px; padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
 .here { position: absolute; width: 0; height: 0; pointer-events: none; }
@@ -39,10 +40,13 @@
 .here s { position: absolute; left: 0; top: -20px; width: 60px; height: 40px; text-decoration: none; background: linear-gradient(90deg, oklch(0.6 0.075 135 / 0.6), transparent); clip-path: polygon(0 50%, 100% 0, 100% 100%); }
 .plan-hint { margin: 0; }
 .plan-note { display: none; margin: 0; font-size: 11px; }
-@media (max-width: 720px), (max-height: 520px) { .plan-note { display: block; } }
+@media (max-width: 720px), (max-height: 520px) {
+  .plan-note { display: block; }
+  .plan:not(.plan-big) .map, .plan:not(.plan-big) .plan-hint { display: none; } /* phones: header only, the plan opens big */
+}
 .plan-big { left: 50%; bottom: 50%; transform: translate(-50%, 50%); width: min(1100px, calc(100vw - 48px)); z-index: 3 !important; }
 .plan-big .here s { width: 110px; height: 72px; top: -36px; }
-.here-out i { background: var(--paper); border: 2px dashed var(--accent-ink); }
+.here-out i { left: -9px; top: -9px; width: 18px; height: 18px; background: var(--paper); border: 3px dashed var(--accent-ink); box-shadow: 0 0 0 2px var(--paper), 0 1px 4px oklch(0.22 0.01 85 / 0.5); }
 .plan-kicker { display: block; }
 .zone-name { max-width: none; }
 

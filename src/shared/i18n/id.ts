@@ -12,6 +12,7 @@ export const t = {
   lockHint: 'Klik untuk melihat sekeliling',
   lockSub: 'Esc untuk kembali ke tombol',
   outside: 'Halaman',
+  oldHouse: 'Rumah lama',
   planTitle: 'Denah',
   planOld: 'Denah sesudah renovasi (denah rumah lama tidak tersedia)',
   planHint: 'Klik ruang di denah untuk pindah',

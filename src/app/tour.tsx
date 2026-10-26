@@ -7,7 +7,7 @@ import { Hud } from '../features/hud/Hud';
 import { Interact } from '../features/interact/Interact';
 import { Measure } from '../features/measure/Measure';
 import { Photo } from '../features/photo/Photo';
-import { Player, SPAWN, teleport } from '../features/player/Player';
+import { Player, SPAWN, fovBase, teleport } from '../features/player/Player';
 import { Adaptive } from '../features/quality/Adaptive';
 import { detected } from '../features/quality/detected';
 import { DPR_MAX, detect } from '../features/quality/quality';
@@ -24,7 +24,8 @@ function Fov() {
   const camera = useThree((s) => s.camera) as PerspectiveCamera;
   const aspect = useThree((s) => s.size.width / s.size.height);
   useEffect(() => {
-    camera.fov = Math.min(90, 70 / Math.min(1, aspect * 1.4));
+    fovBase.value = Math.min(90, 70 / Math.min(1, aspect * 1.4));
+    camera.fov = fovBase.value; // the intro glide overrides this until it ends
     camera.updateProjectionMatrix();
   }, [camera, aspect]);
   return null;

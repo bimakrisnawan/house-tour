@@ -106,7 +106,7 @@ export function Hud() {
       {(locked || touch) && !photo && <span className="crosshair" aria-hidden="true" />}
       <p className="chip disclaimer">{variant === 'eksisting' ? t.before : t.disclaimer}</p>
       {!photo && <PlanCard />}
-      {!photo && factsOpen && <Facts />}
+      {!photo && factsOpen && variant === 'renovasi' && <Facts />}
       {!photo && <Rail />}
       <Prompt />
       <ToolBar />

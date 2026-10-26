@@ -9,6 +9,7 @@ import { bus } from '../interact/bus';
 import { runtime } from '../scene/registry';
 
 const ray = new Raycaster();
+const INK = '#4d6b47'; // --accent-ink (light set): reads on white walls and grey floors alike
 
 /** Two clicks (or taps) on any surface: a dimension line with the distance, like on a working drawing. */
 export function Measure() {
@@ -64,13 +65,13 @@ export function Measure() {
     <group>
       {pts.map((p, i) => (
         <mesh key={i} position={p} renderOrder={10}>
-          <sphereGeometry args={[0.025, 12, 8]} />
-          <meshBasicMaterial color="#f7f5ef" depthTest={false} />
+          <sphereGeometry args={[0.02, 12, 8]} />
+          <meshBasicMaterial color={INK} depthTest={false} />
         </mesh>
       ))}
       {pts.length === 2 && (
         <>
-          <Line points={pts} color="#f7f5ef" lineWidth={2} depthTest={false} renderOrder={10} />
+          <Line points={pts} color={INK} lineWidth={3} depthTest={false} renderOrder={10} />
           <Html position={mid} center zIndexRange={[20, 10]}>
             <span className="measure-label mono">{d < 1 ? centimetres(d) : `${metres(d)} m`}</span>
           </Html>
