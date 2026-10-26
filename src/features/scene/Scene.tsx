@@ -45,9 +45,17 @@ function tintGrass(m: MeshStandardMaterial) {
   m.color.setRGB(...(target.map((v, k) => Math.min(2, (v / Math.max(1, mean[k])) ** 2.2)) as [number, number, number]));
 }
 
+// The old house sits 10 m beside the lot in the .blend (renders shifted the camera); the web puts it on the lot so
+// before/after swaps the house around the visitor. Ground and trees are shared and stay where they are.
+const EKSISTING_OFFSET_X = 10;
+
 function prepare(variant: VariantId, root: Object3D, atlases: Atlases): VariantRuntime {
   const rt: VariantRuntime = { root, interactives: [], emitters: [], colliders: [], unlit: [], pickables: [] };
   const cache = new Map<string, MeshStandardMaterial>();
+  if (variant === 'eksisting' && !root.userData.shifted) {
+    root.children.forEach((o) => { if (extra(o, 'lm') === 'main') o.position.x += EKSISTING_OFFSET_X; });
+    root.userData.shifted = true;
+  }
   root.updateMatrixWorld(true);
 
   root.traverse((o) => {

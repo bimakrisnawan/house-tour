@@ -12,6 +12,9 @@
 .btn-ghost:hover { background: var(--mist); }
 
 .look { position: fixed; inset: 0; z-index: 0; border: 0; background: transparent; display: grid; place-items: center; cursor: pointer; }
+.look-hint { transition: opacity 600ms ease; }
+.look-hint-off { opacity: 0; }
+.look:hover .look-hint, .look:focus-visible .look-hint { opacity: 1; }
 .hud > :not(.look) { z-index: 1; }
 .crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1.5px oklch(0.22 0.01 85 / 0.6); }
 .prompt { position: fixed; left: 50%; top: calc(50% + 28px); transform: translateX(-50%); display: flex; gap: 8px; align-items: center; font-size: 14px; }
@@ -25,7 +28,7 @@
 .plan-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 44px; }
 .plan-room { font-size: 18px; font-weight: 600; }
 .plan-actions { display: flex; }
-.map { position: relative; aspect-ratio: 1646 / 657; overflow: hidden; border-radius: 4px; background: var(--mist); }
+.map { position: relative; aspect-ratio: 1920 / 900; overflow: hidden; border-radius: 4px; background: var(--mist); }
 .map img { position: absolute; height: auto; user-select: none; }
 .zone { position: absolute; border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 2px; }
 .zone:hover, .zone:focus-visible { background: oklch(0.975 0.006 85 / 0.25); outline: 1.5px solid var(--paper); outline-offset: -1.5px; }
@@ -39,6 +42,9 @@
 @media (max-width: 720px), (max-height: 520px) { .plan-note { display: block; } }
 .plan-big { left: 50%; bottom: 50%; transform: translate(-50%, 50%); width: min(1100px, calc(100vw - 48px)); z-index: 3 !important; }
 .plan-big .here s { width: 110px; height: 72px; top: -36px; }
+.here-out i { background: var(--paper); border: 2px dashed var(--accent-ink); }
+.plan-kicker { display: block; }
+.zone-name { max-width: none; }
 
 /* fact sheet (V3 title block) */
 .kop { position: fixed; left: 24px; top: 64px; width: 300px; max-height: calc(100vh - 64px - 290px); overflow: auto; border-radius: 0; display: grid; align-content: start; }

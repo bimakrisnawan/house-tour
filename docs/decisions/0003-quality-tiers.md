@@ -21,7 +21,7 @@ Tiers `rendah`, `sedang`, `tinggi`, `ultra`:
 3. The menu "Grafik" overrides with a fixed tier or "Otomatis"; the choice is stored in `localStorage`.
 
 What a tier changes (as built): DPR cap 0.75 / 1 / 1.5 / 2; GLB texture cap 1024 / 2048 / 4096 / 4096 px
-(the albedo atlas is what changes); lightmaps 1024 / 2048 / 2048 / 2048 px; MSAA from sedang; bloom +
+(the albedo atlas is what changes); lightmaps 1024 / 2048 / 2048 / 4096 px; MSAA from sedang; bloom +
 4x multisampled composer from tinggi. Ambient occlusion is in the bake, so N8AO was not needed.
 Only the tier's files are downloaded (one renovated-house GLB 4.8-5.3 MB + its lightmaps). The whole deployment must stay under 100 MB
 (`scripts/check-budget.mjs` fails the build otherwise).

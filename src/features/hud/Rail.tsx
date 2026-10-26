@@ -42,7 +42,8 @@ export function Rail() {
       {pop === 'lamps' && <LampsPopover />}
       {pop === 'time' && <TimePopover />}
       <nav className="panel rail" aria-label="Mode">
-        <RailButton icon={mode === 'fly' ? 'fly' : 'walk'} label={mode === 'fly' ? t.modeFly : t.modeWalk} on={mode === 'fly'} onClick={toggleFly} hint="F" pressed={mode === 'fly'} />
+        {/* an action, not a status: "Terbang" while walking; while flying it is marked active and offers to land */}
+        <RailButton icon={mode === 'fly' ? 'walk' : 'fly'} label={mode === 'fly' ? t.modeLand : t.modeFly} on={mode === 'fly'} onClick={toggleFly} hint="F" pressed={mode === 'fly'} />
         <RailButton icon="lamp" label={t.lamps} on={pop === 'lamps'} onClick={() => toggle('lamps')} hint="L" />
         <RailButton icon="time" label={t.time} on={pop === 'time'} onClick={() => toggle('time')} />
         <RailButton icon="measure" label={t.measure} on={tool === 'measure'} onClick={() => set({ tool: tool === 'measure' ? 'none' : 'measure' })} hint="R" pressed={tool === 'measure'} />

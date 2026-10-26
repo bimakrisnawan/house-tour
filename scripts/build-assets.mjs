@@ -1,6 +1,6 @@
 // Blender build output -> public/assets (ADR 0002, 0003).
 //   GLB per tier: meshopt geometry, WebP textures capped at 1024 / 2048 / 4096 px (lo / md / hi)
-//   lightmaps: WebP at 1024 and 2048 px; reflection panoramas; floor plan; scene.json manifest
+//   lightmaps: WebP at 1024, 2048 and 4096 px (4k for ultra only); reflection panoramas; floor plan; scene.json manifest
 // Usage: node scripts/build-assets.mjs [blender_out_dir]   (default: ../../blender/rumah/web/out)
 import { execFileSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -14,7 +14,7 @@ const renders = fileURLToPath(new URL('../../../blender/rumah/render/v3', import
 const out = join(root, 'public', 'assets');
 const cli = join(root, 'node_modules', '@gltf-transform', 'cli', 'bin', 'cli.js');
 const TIERS = { lo: 1024, md: 2048, hi: 4096 };
-const LM = { '1k': 1024, '2k': 2048 };
+const LM = { '1k': 1024, '2k': 2048, '4k': 4096 };
 const mb = (p) => (statSync(p).size / 1e6).toFixed(2);
 
 rmSync(out, { recursive: true, force: true });

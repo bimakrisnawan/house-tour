@@ -12,7 +12,16 @@ const enter = document.getElementById('enter') as HTMLButtonElement;
 const status = document.getElementById('poster-status')!;
 enter.disabled = false;
 
+// Retry = reload and start again: loaders cache a failed request, a fresh page does not.
+const AUTOSTART = 'rumah-web:autostart';
+let failed = false;
+
 enter.addEventListener('click', async () => {
+  if (failed) {
+    try { sessionStorage.setItem(AUTOSTART, '1'); } catch { /* private mode: the user clicks Masuk once more */ }
+    location.reload();
+    return;
+  }
   enter.disabled = true;
   initAudio(useStore.getState().sound); // inside the click: browsers allow audio only after a user gesture
   status.textContent = t.loading;
@@ -24,7 +33,14 @@ enter.addEventListener('click', async () => {
     poster.inert = true; // hidden poster must leave the tab order and the accessibility tree
   } catch (err) {
     console.error(err);
-    status.textContent = err instanceof Error && err.message === t.noWebgl ? t.noWebgl : t.loadFailed;
-    enter.disabled = false;
+    const noWebgl = err instanceof Error && err.message === t.noWebgl;
+    status.textContent = noWebgl ? t.noWebgl : t.loadFailed;
+    enter.textContent = t.retry;
+    enter.disabled = noWebgl; // retrying cannot fix a missing WebGL
+    failed = true;
   }
 });
+
+try {
+  if (sessionStorage.getItem(AUTOSTART)) { sessionStorage.removeItem(AUTOSTART); enter.click(); }
+} catch { /* storage blocked: no autostart */ }

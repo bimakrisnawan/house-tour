@@ -13,11 +13,11 @@ export interface SceneManifest {
 export type VariantId = 'renovasi' | 'eksisting';
 
 /** Geometry/texture set and lightmap resolution per quality tier (ADR 0003). */
-export const TIER_ASSETS: Record<Tier, { glb: 'lo' | 'md' | 'hi'; lm: '1k' | '2k' }> = {
+export const TIER_ASSETS: Record<Tier, { glb: 'lo' | 'md' | 'hi'; lm: '1k' | '2k' | '4k' }> = {
   0: { glb: 'lo', lm: '1k' },
   1: { glb: 'md', lm: '2k' },
   2: { glb: 'hi', lm: '2k' },
-  3: { glb: 'hi', lm: '2k' },
+  3: { glb: 'hi', lm: '4k' }, // desktop only (startTier caps phones at tinggi)
 };
 
 export const glbUrl = (v: VariantId, t: Tier) => `/assets/${v}/${TIER_ASSETS[t].glb}.glb`;

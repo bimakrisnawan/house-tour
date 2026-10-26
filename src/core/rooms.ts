@@ -2,15 +2,15 @@
 // in glTF axes (x = Blender x, z = -Blender y), computed from the plan camera Cam_Denah by build_web.py and
 // copied here; w spans x, d spans z.
 export const ROOMS = [
-  { id: 'teras', name: 'Teras', w: 1.75, d: 1.5, x: 14.73, z: -3.4 },
-  { id: 'carport', name: 'Carport', w: 2.5, d: 4.0, x: 11.4, z: -2.15 },
-  { id: 'tamu', name: 'Ruang Tamu', w: 2.8, d: 4.1, x: 14.2, z: -6.35 },
-  { id: 'makan', name: 'Ruang Makan', w: 2.8, d: 4.15, x: 14.2, z: -10.47 },
-  { id: 'k2', name: 'Kamar 2', w: 2.5, d: 2.85, x: 11.4, z: -6.47 },
-  { id: 'wc', name: 'Kamar Mandi', w: 2.5, d: 1.5, x: 11.4, z: -8.8 },
-  { id: 'k1', name: 'Kamar 1', w: 2.5, d: 2.7, x: 11.4, z: -11.05 },
-  { id: 'dapur', name: 'Dapur', w: 1.95, d: 1.55, x: 14.62, z: -13.47 },
-  { id: 'jemur', name: 'Ruang Jemur', w: 3.37, d: 1.7, x: 11.84, z: -13.4 },
+  { id: 'teras', name: 'Teras', short: 'Teras', w: 1.75, d: 1.5, x: 14.73, z: -3.4 },
+  { id: 'carport', name: 'Carport', short: 'Carport', w: 2.5, d: 4.0, x: 11.4, z: -2.15 },
+  { id: 'tamu', name: 'Ruang Tamu', short: 'Tamu', w: 2.8, d: 4.1, x: 14.2, z: -6.35 },
+  { id: 'makan', name: 'Ruang Makan', short: 'Makan', w: 2.8, d: 4.15, x: 14.2, z: -10.47 },
+  { id: 'k2', name: 'Kamar 2', short: 'K2', w: 2.5, d: 2.85, x: 11.4, z: -6.47 },
+  { id: 'wc', name: 'Kamar Mandi', short: 'KM', w: 2.5, d: 1.5, x: 11.4, z: -8.8 },
+  { id: 'k1', name: 'Kamar 1', short: 'K1', w: 2.5, d: 2.7, x: 11.4, z: -11.05 },
+  { id: 'dapur', name: 'Dapur', short: 'Dapur', w: 1.95, d: 1.55, x: 14.62, z: -13.47 },
+  { id: 'jemur', name: 'Ruang Jemur', short: 'Jemur', w: 3.37, d: 1.7, x: 11.84, z: -13.4 },
 ] as const;
 
 export type Room = (typeof ROOMS)[number];

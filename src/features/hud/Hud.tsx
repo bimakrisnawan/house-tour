@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { t } from '../../shared/i18n/id';
 import { ROOM_LAMP, useStore } from '../../state/store';
 import { play } from '../audio/audio';
@@ -79,6 +79,17 @@ function ToolBar() {
   return null;
 }
 
+/** Desktop: clicking the scene captures the mouse. The hint fades after a few seconds so it does not sit on the view. */
+function LookOverlay() {
+  const [shown, setShown] = useState(true);
+  useEffect(() => { const id = setTimeout(() => setShown(false), 4500); return () => clearTimeout(id); }, []);
+  return (
+    <button id="look" className="look" type="button" aria-label={t.lockHint}>
+      <span className={`chip look-hint ${shown ? '' : 'look-hint-off'}`}>{t.lockHint}</span>
+    </button>
+  );
+}
+
 export function Hud() {
   const locked = useStore((s) => s.locked);
   const menuOpen = useStore((s) => s.menuOpen);
@@ -91,11 +102,7 @@ export function Hud() {
 
   return (
     <div className={`hud ${locked ? 'hud-locked' : ''} ${photo ? 'hud-photo' : ''} ${touch ? 'hud-touch' : ''}`}>
-      {!touch && !locked && !menuOpen && (
-        <button id="look" className="look" type="button">
-          <span className="chip">{t.lockHint}</span>
-        </button>
-      )}
+      {!touch && !locked && !menuOpen && <LookOverlay />}
       {(locked || touch) && !photo && <span className="crosshair" aria-hidden="true" />}
       <p className="chip disclaimer">{variant === 'eksisting' ? t.before : t.disclaimer}</p>
       {!photo && <PlanCard />}
