@@ -139,7 +139,8 @@ export function Player({ touch }: { touch: boolean }) {
       if (stride.current > STEP_EVERY) { stride.current = 0; footstep(); }
     }
     const room = roomAt(feet.x, feet.z)?.id ?? null;
-    if (room !== st.room) set({ room });
+    const area = feet.z > 0 ? 'depan' : 'halaman'; // z > 0 = the street side of the fence line
+    if (room !== st.room || area !== st.area) set({ room, area });
   });
 
   return touch ? null : (

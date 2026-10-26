@@ -12,7 +12,7 @@ import { daylight } from '../../core/time';
 import { LAMP_GROUPS, useStore, type LampGroup } from '../../state/store';
 import { t } from '../../shared/i18n/id';
 import { glbUrl, lmUrl, loadManifest, type Atlas, type VariantId } from './assets';
-import { lightmapped, makeRig, type Rig } from './lightmaps';
+import { exposure, lightmapped, makeRig, type Rig } from './lightmaps';
 import { runtime, type VariantRuntime } from './registry';
 
 Mesh.prototype.raycast = acceleratedRaycast;
@@ -76,7 +76,7 @@ function prepare(variant: VariantId, root: Object3D, atlases: Atlases): VariantR
 
     const src = mesh.material as MeshStandardMaterial;
     if (extra(mesh, 'unlit')) {
-      const m = new MeshBasicMaterial({ map: src.map, alphaTest: 0.5, side: DoubleSide });
+      const m = new MeshBasicMaterial({ map: src.map, alphaTest: 0.4, alphaToCoverage: true, side: DoubleSide }); // soft edges with MSAA
       mesh.material = m; rt.unlit.push(m);
       return;
     }
@@ -89,6 +89,7 @@ function prepare(variant: VariantId, root: Object3D, atlases: Atlases): VariantR
         const phys = m as MeshPhysicalMaterial;
         if (phys.transmission > 0) { phys.transmission = 0; m.transparent = true; m.opacity = 0.85; } // curtains: skip the transmission pass
         if (m.transparent) m.depthWrite = false;
+        if (atlasId === 'ground' || /tanah/i.test(src.name)) { m.roughness = 1; m.envMapIntensity = 0.15; }
         cache.set(key, m);
       }
       mesh.material = m;
@@ -159,30 +160,45 @@ function LightRig() {
     rt?.unlit.forEach((m) => (m as MeshBasicMaterial).color.setScalar(6 * (0.08 + 0.92 * Math.max(d.sun, d.sky))));
     (scene.background as Color).setRGB(...d.background);
     const p = camera.position;
+    // the old house has no lamps in the model: indoors the eye adapts, as it would in a real unlit house by day
+    const adapt = variant === 'eksisting' && insideHouse(p.x, p.y, p.z) ? 3 : 1;
+    exposure.value += (adapt - exposure.value) * (1 - Math.exp(-dt * 2));
     scene.environmentIntensity = insideHouse(p.x, p.y, p.z) ? 0.2 + 0.6 * Math.min(1, d.sky + lampSum * 0.1) : 0.1 + 0.9 * d.sky;
   });
   return null;
 }
 
+// The poster's own sky (Blender world, render/web/render_sky.py) by day, fading to a dusk/night gradient.
+// No tone mapping in this shader: the panorama is already AgX-rendered, so it shows exactly like the poster.
 const skyMat = new ShaderMaterial({
   side: BackSide, depthWrite: false,
-  uniforms: { top: { value: new Color() }, horizon: { value: new Color() } },
+  uniforms: { map: { value: null as Texture | null }, day: { value: 1 }, top: { value: new Color() }, horizon: { value: new Color() } },
   vertexShader: 'varying vec3 vDir; void main() { vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position.z = gl_Position.w; }',
-  fragmentShader: 'uniform vec3 top; uniform vec3 horizon; varying vec3 vDir; void main() { float h = clamp(vDir.y, 0.0, 1.0); gl_FragColor = vec4(mix(horizon, top, pow(h, 0.6)), 1.0); }',
+  fragmentShader: `uniform sampler2D map; uniform float day; uniform vec3 top; uniform vec3 horizon; varying vec3 vDir;
+    void main() {
+      vec3 d = normalize(vDir);
+      vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5, asin(clamp(d.y, -1.0, 1.0)) * 0.31830989 + 0.5);
+      vec3 grad = mix(horizon, top, pow(clamp(d.y, 0.0, 1.0), 0.6));
+      gl_FragColor = vec4(mix(pow(grad, vec3(1.0 / 2.2)), texture2D(map, uv).rgb, day), 1.0);
+    }`,
 });
 
-/** Gradient sky that follows the time slider (the ground hides the lower half). */
+/** Sky dome around the camera (the ground hides its lower half). */
 function Sky() {
+  const manifest = use(loadManifest());
   const camera = useThree((s) => s.camera);
   const ref = useRef<Mesh>(null);
+  const tex = useLoader(TextureLoader, `/assets/${manifest.env.langit}`);
+  useMemo(() => { tex.colorSpace = NoColorSpace; skyMat.uniforms.map.value = tex; }, [tex]);
   useFrame(() => {
     const d = daylight(useStore.getState().time);
+    skyMat.uniforms.day.value = Math.max(0, (d.sky - 0.033) / 0.967); // poster sky by day, gradient at dusk and night
     skyMat.uniforms.top.value.setRGB(...d.zenith); skyMat.uniforms.horizon.value.setRGB(...d.background);
     ref.current?.position.copy(camera.position);
   });
   return (
     <mesh ref={ref} material={skyMat} renderOrder={-1} frustumCulled={false}>
-      <sphereGeometry args={[500, 24, 12]} />
+      <sphereGeometry args={[500, 32, 16]} />
     </mesh>
   );
 }

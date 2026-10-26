@@ -28,6 +28,7 @@ export function PlanCard() {
   const room = useStore((s) => s.room);
   const big = useStore((s) => s.planOpen);
   const variant = useStore((s) => s.variant);
+  const area = useStore((s) => s.area);
   const set = useStore((s) => s.set);
   const here = useRef<HTMLSpanElement>(null);
   const current = ROOMS.find((r) => r.id === room);
@@ -60,11 +61,11 @@ export function PlanCard() {
   };
 
   return (
-    <section className={`panel plan ${big ? 'plan-big' : ''}`} aria-label={t.planTitle}>
+    <section className={`panel plan ${big ? 'plan-big' : ''} ${old ? 'plan-old' : ''}`} aria-label={t.planTitle}>
       <header className="plan-head">
         <div>
           {big && <span className="label plan-kicker">{t.planTitle}</span>}
-          <b className="plan-room">{old ? t.oldHouse : current?.name ?? t.outside}</b>
+          <b className="plan-room">{old ? t.oldHouse : current?.name ?? (area === 'depan' ? t.street : t.outside)}</b>
           {current && !old && <span className="mono label nowrap"> {roomSize(current.w, current.d)}</span>}
         </div>
         <div className="plan-actions">
@@ -89,7 +90,7 @@ export function PlanCard() {
             <button key={r.id} type="button" className={`zone ${r.id === room ? 'zone-on' : ''}`} onClick={() => go(r.id)}
               style={{ left: `${l}%`, top: `${tp}%`, width: `${(w / CW) * 100}%`, height: `${(h / CH) * 100}%` }}
               aria-label={`Pindah ke ${r.name}`} title={r.name}>
-              {big && <span className="zone-name">{narrow ? r.short : r.name}</span>}
+              <span className="zone-name">{narrow ? r.short : r.name}</span>
             </button>
           );
         })}
@@ -97,7 +98,7 @@ export function PlanCard() {
       </div>
       <p className="label plan-hint desk-only">{t.planHint}</p>
       {variant === 'eksisting' && <p className="label plan-hint">{t.planOld}</p>}
-      <p className="label plan-note">{variant === 'eksisting' ? t.before : t.disclaimer}</p>
+      <p className="label plan-note">{variant === 'eksisting' ? t.before : t.disclaimerLong}</p>
     </section>
   );
 }

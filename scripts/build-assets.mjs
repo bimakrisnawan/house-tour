@@ -18,7 +18,7 @@ const LM = { '1k': 1024, '2k': 2048, '4k': 4096 };
 const mb = (p) => (statSync(p).size / 1e6).toFixed(2);
 
 rmSync(out, { recursive: true, force: true });
-const scene = { variants: {}, env: { dalam: 'env/dalam.webp', luar: 'env/luar.webp' }, plan: 'denah.webp' };
+const scene = { variants: {}, env: { dalam: 'env/dalam.webp', luar: 'env/luar.webp', langit: 'env/langit.webp' }, plan: 'denah.webp' };
 
 for (const variant of ['renovasi', 'eksisting']) {
   const dir = join(src, variant);
@@ -48,7 +48,7 @@ for (const variant of ['renovasi', 'eksisting']) {
 }
 
 mkdirSync(join(out, 'env'), { recursive: true });
-for (const n of ['dalam', 'luar']) {
+for (const n of ['dalam', 'luar', 'langit']) {
   await sharp(join(src, 'renovasi', `env_${n}.png`)).webp({ quality: 85 }).toFile(join(out, 'env', `${n}.webp`));
 }
 await sharp(join(renders, '11_denah_atas.png')).webp({ quality: 82 }).toFile(join(out, 'denah.webp'));

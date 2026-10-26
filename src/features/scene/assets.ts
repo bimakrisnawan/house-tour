@@ -6,7 +6,7 @@ export interface Atlas { files: string[]; groups: Record<string, GroupSlot> }
 export interface Variant { lightmaps: Record<string, Atlas>; groups: { id: string; mode: 'rgb' | 'lum' }[] }
 export interface SceneManifest {
   variants: Record<'renovasi' | 'eksisting', Variant>;
-  env: { dalam: string; luar: string };
+  env: { dalam: string; luar: string; langit: string };
   plan: string;
 }
 

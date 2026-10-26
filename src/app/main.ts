@@ -29,6 +29,8 @@ enter.addEventListener('click', async () => {
     const { mountTour } = await import('./tour');
     await mountTour(document.getElementById('app')!, (msg) => (status.textContent = msg));
     const poster = document.getElementById('poster')!;
+    const fade = new URLSearchParams(location.search).get('fade'); // ?fade=ms slows the dissolve for review captures
+    if (fade) poster.style.transitionDuration = `${Math.min(10000, +fade)}ms`;
     poster.classList.add('is-leaving');
     poster.inert = true; // hidden poster must leave the tab order and the accessibility tree
   } catch (err) {

@@ -58,11 +58,12 @@ function Prompt() {
 
 function ToolBar() {
   const tool = useStore((s) => s.tool);
+  const measured = useStore((s) => s.measured);
   const set = useStore((s) => s.set);
   if (tool === 'measure') {
     return (
       <div className="panel toolbar">
-        <span className="label">{touch ? t.measureHintTouch : t.measureHint}</span>
+        <span className="label">{measured ? (touch ? t.measureAgainTouch : t.measureAgain) : touch ? t.measureHintTouch : t.measureHint}</span>
         <button type="button" className="btn-ghost" onClick={() => bus.emit('measure-clear')}>{t.measureClear}</button>
         <button type="button" className="btn-ghost" onClick={() => set({ tool: 'none' })}>{t.done}</button>
       </div>
@@ -104,7 +105,7 @@ export function Hud() {
     <div className={`hud ${locked ? 'hud-locked' : ''} ${photo ? 'hud-photo' : ''} ${touch ? 'hud-touch' : ''}`}>
       {!touch && !locked && !menuOpen && <LookOverlay />}
       {(locked || touch) && !photo && <span className="crosshair" aria-hidden="true" />}
-      <p className="chip disclaimer">{variant === 'eksisting' ? t.before : t.disclaimer}</p>
+      <p className="chip disclaimer">{variant === 'eksisting' ? t.before : t.disclaimerLong}</p>
       {!photo && <PlanCard />}
       {!photo && factsOpen && variant === 'renovasi' && <Facts />}
       {!photo && <Rail />}

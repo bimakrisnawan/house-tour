@@ -18,7 +18,7 @@
 .hud > :not(.look) { z-index: 1; }
 .crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1.5px oklch(0.22 0.01 85 / 0.6); }
 .prompt { position: fixed; left: 50%; top: calc(50% + 28px); transform: translateX(-50%); display: flex; gap: 8px; align-items: center; font-size: 14px; }
-.disclaimer { position: fixed; left: 24px; top: 24px; }
+.disclaimer { position: fixed; right: 24px; top: 24px; } /* same place as on the poster */
 .notice { position: fixed; left: 50%; top: 24px; transform: translateX(-50%); font-size: 14px; max-width: calc(100vw - 32px); }
 .notice:empty { display: none; }
 .loading { position: fixed; left: 50%; top: 64px; transform: translateX(-50%); }
@@ -34,6 +34,8 @@
 .zone:hover { background: oklch(0.975 0.006 85 / 0.25); outline: 1.5px solid var(--paper); outline-offset: -1.5px; }
 .zone:focus-visible { background: oklch(0.975 0.006 85 / 0.25); } /* ring from base.css :focus-visible */
 .zone-on { outline: 2px solid var(--accent-ink); outline-offset: -2px; background: oklch(0.6 0.075 135 / 0.18); }
+.zone .zone-name { display: none; }
+.plan-big .zone .zone-name, .zone:hover .zone-name, .zone:focus-visible .zone-name { display: block; }
 .zone-name { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--paper); color: var(--ink); font-size: 12px; padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
 .here { position: absolute; width: 0; height: 0; pointer-events: none; }
 .here i { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); }
@@ -132,5 +134,9 @@
   .rail { grid-template-columns: none; }
   .disclaimer { bottom: auto; top: auto; left: auto; right: 8px; bottom: 8px; }
 }
-.hud-photo .disclaimer { left: 24px; }
+
 @media (prefers-reduced-motion: reduce) { .here s { transition: none; } }
+
+/* before mode: the plan is the renovated one, so it marks no room and no position */
+.plan-old .zone-on { outline: none; background: transparent; }
+.plan-old .here { display: none; }

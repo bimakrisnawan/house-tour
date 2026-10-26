@@ -40,6 +40,8 @@ export interface State {
   variant: VariantId;
   tool: Tool;
   room: RoomId | null;
+  area: 'depan' | 'halaman'; // outside every room: on the street side or in the yard
+  measured: boolean; // a finished two-point measurement is on screen
   planOpen: boolean; // enlarged plan
   factsOpen: boolean;
   menuOpen: boolean;
@@ -64,6 +66,8 @@ export const useStore = create<State>((set, get) => ({
   variant: 'renovasi',
   tool: 'none',
   room: null,
+  area: 'depan',
+  measured: false,
   planOpen: false,
   factsOpen: false,
   menuOpen: false,

@@ -19,6 +19,7 @@ export function Measure() {
   const [pts, setPts] = useState<Vector3[]>([]);
 
   useEffect(() => bus.on('measure-clear', () => setPts([])), []);
+  useEffect(() => { useStore.getState().set({ measured: pts.length === 2 }); }, [pts]);
   useEffect(() => { if (tool !== 'measure') setPts([]); }, [tool]);
 
   useEffect(() => {
